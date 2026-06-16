@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<title>Bus 26 Live Tracker</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/protobufjs/7.2.4/protobuf.min.js"></script>
+<style>
+  #map { height: 100vh; width: 100vw; }
+</style>
+</head>
+<body>
+<div id="map"></div>
+
+<script>
+// Создаём карту СПб
+const map = L.map('map').setView([59.93, 30.31], 12);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+const markers = {}; // vehicle_id → marker
+
+// Загружаем protobuf-схему GTFS-RT
+let GTFS;
+fetch("https://unpkg.com/gtfs-realtime-bindings/dist/gtfs-realtime.proto")
+  .then(r => r.text())
+  .then(proto => {
+    GTFS = protobuf.parse(proto).root;
+    update(); // первый вызов
+    setInterval(update, 3000);
+  });
+
+// Загружаем данные и обновляем только маркеры
+function update() {
+  fetch("https://transport.orgp.spb.ru/Portal/transport/internalapi/gtfs/realtime/vehicle", {
+    method: "GET"
+  })
+  .then(r => r.arrayBuffer())
+  .then(buf => {
+    const FeedMessage = GTFS.lookupType("transit_realtime.FeedMessage");
+    const msg = FeedMessage.decode(new Uint8Array(buf));
+
+    msg.entity.forEach(e => {
+      if (!e.vehicle || !e.vehicle.trip) return;
+      const v = e.vehicle;
+      if (!v.trip.routeId.includes("26")) return;
+
+      const id = v.vehicle ? v.vehicle.id : e.id;
+      const lat = v.position.latitude;
+      const lon = v.position.longitude;
+
+      if (!markers[id]) {
+        markers[id] = L.marker([lat, lon]).addTo(map);
+      } else {
+        markers[id].setLatLng([lat, lon]);
+      }
+    });
+  });
+}
+</script>
+</body>
+</html>
