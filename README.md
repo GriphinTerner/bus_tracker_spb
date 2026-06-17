@@ -205,15 +205,6 @@ saint-petersburg
 openstreetmap
 ```
 
-## Status
-
-The project is a working Streamlit prototype for displaying bus route 26 positions on an interactive map.
-
-## Author
-
-Created by Nikita Ivchenkov.
-
-GitHub: [GriphinTerner](https://github.com/GriphinTerner)
 
 ## License
 
