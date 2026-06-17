@@ -187,25 +187,6 @@ __pycache__/
 *.log
 ```
 
-## Recommended GitHub repository description
-
-Streamlit application for tracking Saint Petersburg bus route 26 using Python, Folium and GTFS Realtime data.
-
-## Recommended GitHub topics
-
-```text
-python
-streamlit
-folium
-gtfs
-gtfs-realtime
-public-transport
-bus-tracker
-saint-petersburg
-openstreetmap
-```
-
-
 ## License
 
 This project is intended for educational and portfolio purposes.
