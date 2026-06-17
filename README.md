@@ -99,22 +99,3 @@ or:
 http://127.0.0.1:8000
 ```
 
-## Screenshots
-
-Screenshots can be added to the `screenshots/` folder.
-
-```text
-screenshots/
-  map.png
-  tracker.png
-```
-
-Example:
-
-```markdown
-![Live map](screenshots/map.png)
-```
-
-## Status
-
-The project is a working prototype for real-time public transport tracking and map visualization.
